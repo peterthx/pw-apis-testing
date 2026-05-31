@@ -5,6 +5,7 @@ export interface DataResponse {
   name: string;
   data: {
     color: string;
+    [key: string]: any;
   };
 }
 
