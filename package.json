@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test":"pnpm exec playwright test"
+    "test": "pnpm exec playwright test"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +12,7 @@
   "packageManager": "pnpm@10.29.3",
   "devDependencies": {
     "@playwright/test": "^1.60.0",
-    "@types/node": "^25.9.1"
+    "@types/node": "^25.9.1",
+    "zod": "^4.4.3"
   }
 }
