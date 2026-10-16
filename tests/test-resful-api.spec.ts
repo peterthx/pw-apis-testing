@@ -1,5 +1,5 @@
 import { test, expect } from "./fixtures/api-fixtures";
-import { ObjectSchema } from "../api/objects.api";
+import { ObjectSchema, type NewObject } from "../api/objects.api";
 import { validateSchema } from "./utils/schema-validator";
 
 test.describe("RESTful API Objects", () => {
@@ -7,21 +7,18 @@ test.describe("RESTful API Objects", () => {
     const response = await objectsApi.getObjectById("3");
     expect(response).toBeOK();
 
-    const resBody = await response.json();
+    const object = validateSchema(ObjectSchema, await response.json());
 
-    // Validate schema
-    validateSchema(ObjectSchema, resBody);
-
-    expect(resBody.id).toBe("3");
-    expect(resBody.name).toBe("Apple iPhone 12 Pro Max");
-    expect(resBody.data).toEqual({
+    expect(object.id).toBe("3");
+    expect(object.name).toBe("Apple iPhone 12 Pro Max");
+    expect(object.data).toEqual({
       color: "Cloudy White",
       "capacity GB": 512,
     });
   });
 
   test("Add and delete a new object", async ({ objectsApi }) => {
-    const newObject = {
+    const newObject: NewObject = {
       name: "Apple MacBook Pro 16",
       data: {
         year: 2019,
@@ -35,14 +32,14 @@ test.describe("RESTful API Objects", () => {
     const postResponse = await objectsApi.addObject(newObject);
     expect(postResponse).toBeOK();
 
-    const createdObject = await postResponse.json();
-    expect(createdObject.id).toBeDefined();
+    const createdObject = validateSchema(ObjectSchema, await postResponse.json());
+    expect(createdObject.id).toBeTruthy();
     expect(createdObject.name).toBe(newObject.name);
 
     // Delete object
     const deleteResponse = await objectsApi.deleteObject(createdObject.id);
     expect(deleteResponse).toBeOK();
-    
+
     const deleteBody = await deleteResponse.json();
     expect(deleteBody.message).toContain("has been deleted");
   });
