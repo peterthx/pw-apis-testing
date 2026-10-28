@@ -15,6 +15,9 @@ test.describe("RESTful API Objects", () => {
       color: "Cloudy White",
       "capacity GB": 512,
     });
+
+    console.log("GET response status:", response.status);
+    console.log("GET response body:", await response.json());
   });
 
   test("Add and delete a new object", async ({ objectsApi }) => {
@@ -31,6 +34,8 @@ test.describe("RESTful API Objects", () => {
     // Add object
     const postResponse = await objectsApi.addObject(newObject);
     expect(postResponse).toBeOK();
+    console.log("POST response status:", postResponse.status);
+    console.log("POST response body:", await postResponse.json());
 
     const createdObject = validateSchema(ObjectSchema, await postResponse.json());
     expect(createdObject.id).toBeTruthy();
